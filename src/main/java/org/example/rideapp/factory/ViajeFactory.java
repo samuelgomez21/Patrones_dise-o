@@ -6,40 +6,19 @@ import org.example.rideapp.model.ViajePremium;
 import org.example.rideapp.model.ViajeMoto;
 import org.example.rideapp.model.ViajeCompartido;
 
-/**
- * Factory Method para crear instancias de Viaje según el tipo especificado.
- * Implementa el patrón Factory Method para encapsular la lógica de creación.
- */
+
 public final class ViajeFactory {
 
     private ViajeFactory() {
         // Constructor privado para evitar instanciación
     }
 
-    /**
-     * Crea una instancia de Viaje según el tipo especificado.
-     *
-     * @param tipo El tipo de viaje: "economico", "premium", "moto" o "compartido"
-     * @return Una instancia de Viaje del tipo especificado con configuración predeterminada
-     * @throws IllegalArgumentException si el tipo de viaje es inválido
-     */
+   
     public static Viaje crearViaje(String tipo) {
         return crearViaje(tipo, false, false, true, false, false, 1);
     }
 
-    /**
-     * Crea una instancia de Viaje según el tipo y características especificadas.
-     *
-     * @param tipo El tipo de viaje: "economico", "premium", "moto" o "compartido"
-     * @param wifi Si el viaje incluye wifi
-     * @param mascota Si el viaje permite mascotas
-     * @param aireAcondicionado Si el viaje tiene aire acondicionado
-     * @param equipaje Si el viaje permite equipaje
-     * @param musica Si el viaje tiene música
-     * @param numeroPasajeros Número de pasajeros
-     * @return Una instancia de Viaje del tipo especificado
-     * @throws IllegalArgumentException si el tipo de viaje es inválido
-     */
+  
     public static Viaje crearViaje(
             String tipo,
             boolean wifi,
