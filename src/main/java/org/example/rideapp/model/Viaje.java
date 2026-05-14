@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class Viaje implements Subject {
+public class Viaje implements Subject {
     private final String tipo;
     private final boolean wifi;
     private final boolean mascota;
@@ -19,7 +19,7 @@ public final class Viaje implements Subject {
 
     private final List<Observer> observers = new ArrayList<>();
 
-    private Viaje(
+    protected Viaje(
             String tipo,
             boolean wifi,
             boolean mascota,
