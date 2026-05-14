@@ -1,5 +1,6 @@
 package org.example.rideapp.app;
 
+import org.example.rideapp.mediator.CentralViajesMediator;
 import org.example.rideapp.model.Viaje;
 import org.example.rideapp.observer.Conductor;
 import org.example.rideapp.observer.Pasajero;
@@ -19,7 +20,16 @@ public final class Main {
         System.out.println("¿Son la misma instancia? " + (rideApp == rideApp2));
 
         // Crear viaje usando el Singleton
-        System.out.println("\n========== DEMO STATE + OBSERVER ==========");
+        System.out.println("\n========== DEMO STATE + OBSERVER + MEDIATOR ==========");
+        CentralViajesMediator mediator = new CentralViajesMediator();
+
+        Pasajero pasajero = new Pasajero("Ana");
+        Conductor conductor = new Conductor("Luis");
+        pasajero.setMediator(mediator);
+        conductor.setMediator(mediator);
+        mediator.registrarPasajero(pasajero);
+        mediator.registrarConductor(conductor);
+
         Viaje viaje = rideApp.solicitarViaje(
                 "premium",
                 true,
@@ -31,8 +41,8 @@ public final class Main {
         );
 
         // Agregar observadores
-        viaje.addObserver(new Pasajero("Ana"));
-        viaje.addObserver(new Conductor("Luis"));
+        viaje.addObserver(pasajero);
+        viaje.addObserver(conductor);
         viaje.addObserver(new UIObserver());
 
         // Ciclo de vida del viaje con Observer y State
@@ -42,8 +52,11 @@ public final class Main {
 
         // Transición a Asignado (asignando conductor)
         System.out.println("\n--- Evento: Viaje Asignado ---");
-        viaje.asignarConductor();
-        viaje.notifyObservers(new ViajeEvent(ViajeEventType.ASIGNADO, "Conductor Luis asignado"));
+        pasajero.solicitarConductor(viaje);
+
+        System.out.println("\n--- Mensajeria via Mediator ---");
+        pasajero.enviarMensaje(viaje, "Estoy en la entrada");
+        conductor.enviarMensaje(viaje, "Voy en camino");
 
         // Iniciar viaje (transición mediante State)
         System.out.println("\n--- Transición State: Asignado -> EnCamino ---");
