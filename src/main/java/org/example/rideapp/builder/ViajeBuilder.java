@@ -1,6 +1,7 @@
 package org.example.rideapp.builder;
 
 import org.example.rideapp.model.Viaje;
+import org.example.rideapp.factory.ViajeFactory;
 
 public final class ViajeBuilder {
     private String tipo;
@@ -52,7 +53,7 @@ public final class ViajeBuilder {
     public Viaje build() {
         System.out.println("[Builder] Configurando viaje");
         String tipoFinal = tipo == null ? "economico" : tipo;
-        return Viaje.create(tipoFinal, wifi, mascota, aireAcondicionado, equipaje, musica, numeroPasajeros);
+        return ViajeFactory.crearViaje(tipoFinal, wifi, mascota, aireAcondicionado, equipaje, musica, numeroPasajeros);
     }
 }
 

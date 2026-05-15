@@ -10,72 +10,97 @@ import org.example.rideapp.observer.ViajeEventType;
 
 public final class Main {
     public static void main(String[] args) {
-        // Demostración del Singleton RideApp
-        System.out.println("\n========== DEMO SINGLETON ==========");
-        RideApp rideApp = RideApp.getInstance();
-        System.out.println(rideApp);
+        System.out.println("\n========== FLUJO OBLIGATORIO: RideApp - Factory - Builder - Mediator - Observer - State ==========\n");
 
-        // Verificar que es la misma instancia
-        RideApp rideApp2 = RideApp.getInstance();
-        System.out.println("¿Son la misma instancia? " + (rideApp == rideApp2));
-
-        // Crear viaje usando el Singleton
-        System.out.println("\n========== DEMO STATE + OBSERVER + MEDIATOR ==========");
-        CentralViajesMediator mediator = new CentralViajesMediator();
-
+        // Paso 1: Pasajero solicita viaje
+        System.out.println("PASO 1: Pasajero solicita viaje");
         Pasajero pasajero = new Pasajero("Ana");
-        Conductor conductor = new Conductor("Luis");
-        pasajero.setMediator(mediator);
-        conductor.setMediator(mediator);
-        mediator.registrarPasajero(pasajero);
-        mediator.registrarConductor(conductor);
+        System.out.println();
 
+        // Paso 2: RideApp recibe solicitud
+        System.out.println("PASO 2: RideApp recibe solicitud");
+        RideApp rideApp = RideApp.getInstance();
+        System.out.println();
+
+        // Paso 3: Factory crea el tipo de viaje
+        // Paso 4: Builder configura opciones
+        System.out.println("PASO 3: Factory crea el tipo de viaje");
+        System.out.println("PASO 4: Builder configura opciones");
         Viaje viaje = rideApp.solicitarViaje(
                 "premium",
-                true,
-                false,
-                true,
-                true,
-                true,
-                2
+                true,      // wifi
+                true,      // mascota
+                true,      // aireAcondicionado
+                true,      // equipaje
+                true,      // musica
+                2          // numeroPasajeros
         );
+        System.out.println();
 
-        // Agregar observadores
+        // Configurar Mediator
+        CentralViajesMediator mediator = new CentralViajesMediator();
+        pasajero.setMediator(mediator);
+        mediator.registrarPasajero(pasajero);
+
+        // Crear conductor
+        Conductor conductor = new Conductor("Luis");
+        conductor.setMediator(mediator);
+        mediator.registrarConductor(conductor);
+
+        // Registrar observadores
         viaje.addObserver(pasajero);
         viaje.addObserver(conductor);
         viaje.addObserver(new UIObserver());
 
-        // Ciclo de vida del viaje con Observer y State
-        System.out.println("\n--- Evento: Viaje Solicitado ---");
-        System.out.println("[State] Estado actual: " + viaje.getEstadoNombre());
-        viaje.notifyObservers(new ViajeEvent(ViajeEventType.SOLICITADO, "Viaje solicitado en estado: " + viaje.getEstadoNombre()));
-
-        // Transición a Asignado (asignando conductor)
-        System.out.println("\n--- Evento: Viaje Asignado ---");
+        // Paso 5: Mediator asigna conductor
+        System.out.println("PASO 5: Mediator asigna conductor");
         pasajero.solicitarConductor(viaje);
+        System.out.println();
 
-        System.out.println("\n--- Mensajeria via Mediator ---");
-        pasajero.enviarMensaje(viaje, "Estoy en la entrada");
-        conductor.enviarMensaje(viaje, "Voy en camino");
+        // Paso 6: Observer notifica asignación
+        System.out.println("PASO 6: Observer notifica asignación");
+        System.out.println();
 
-        // Iniciar viaje (transición mediante State)
-        System.out.println("\n--- Transición State: Asignado -> EnCamino ---");
+        // Paso 7: Viaje cambia a estado Asignado
+        System.out.println("PASO 7: Viaje cambia a estado Asignado - Estado: " + viaje.getEstadoNombre());
+        System.out.println();
+
+        // Comunicación entre pasajero y conductor
+        pasajero.enviarMensaje(viaje, "Estoy en la entrada del edificio");
+        conductor.enviarMensaje(viaje, "Ya estoy cerca, 2 minutos");
+        System.out.println();
+
+        // Paso 8: Viaje inicia
+        System.out.println("PASO 8: Viaje inicia");
         viaje.iniciarViaje();
-        viaje.notifyObservers(new ViajeEvent(ViajeEventType.INICIADO, "Viaje iniciado en estado: " + viaje.getEstadoNombre()));
 
-        // Finalizar viaje (transición mediante State)
-        System.out.println("\n--- Transición State: EnCamino -> Finalizado ---");
+        // Paso 9: Observer notifica inicio
+        System.out.println("PASO 9: Observer notifica inicio");
+        viaje.notifyObservers(new ViajeEvent(ViajeEventType.INICIADO, "Viaje iniciado - Conductor Luis en camino"));
+        System.out.println();
+
+        // Paso 10: Viaje cambia a EnCamino (via State Pattern)
+        System.out.println("PASO 10: Viaje cambia a EnCamino - Estado: " + viaje.getEstadoNombre());
+        System.out.println();
+
+        // Paso 11: Viaje finaliza
+        System.out.println("PASO 11: Viaje finaliza");
         viaje.finalizarViaje();
-        viaje.notifyObservers(new ViajeEvent(ViajeEventType.FINALIZADO, "Viaje finalizado en estado: " + viaje.getEstadoNombre()));
 
-        // Intentar operación inválida (debe fallar)
-        System.out.println("\n--- Intento inválido: iniciar viaje ya finalizado ---");
-        viaje.iniciarViaje();
+        // Paso 12: Observer notifica finalización
+        System.out.println("PASO 12: Observer notifica finalización");
+        viaje.notifyObservers(new ViajeEvent(ViajeEventType.FINALIZADO, "Viaje completado exitosamente"));
+        System.out.println();
 
-        // Estadísticas finales
-        System.out.println("\n========== ESTADÍSTICAS FINALES ==========");
-        System.out.println(rideApp);
+        // Paso 13: Estado final = Finalizado
+        System.out.println("PASO 13: Estado final = Finalizado - Estado: " + viaje.getEstadoNombre());
+        System.out.println();
+
+        System.out.println("========== RESUMEN FINAL ==========");
+        System.out.println("Tipo de viaje: " + viaje.getTipo());
+        System.out.println("Estado: " + viaje.getEstadoNombre());
         System.out.println("Total de viajes en sistema: " + rideApp.getTotalViajes());
+        System.out.println("=====================================\n");
     }
 }
 
