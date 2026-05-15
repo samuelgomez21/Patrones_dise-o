@@ -1,17 +1,17 @@
 package org.example.rideapp.model;
 
-import org.example.rideapp.observer.Observer;
-import org.example.rideapp.observer.Subject;
-import org.example.rideapp.observer.ViajeEvent;
-import org.example.rideapp.state.EstadoViaje;
-import org.example.rideapp.state.EstadoSolicitado;
-import org.example.rideapp.state.EstadoAsignado;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class Viaje implements Subject {
+import org.example.rideapp.observer.Observer;
+import org.example.rideapp.observer.Subject;
+import org.example.rideapp.observer.ViajeEvent;
+import org.example.rideapp.state.EstadoAsignado;
+import org.example.rideapp.state.EstadoSolicitado;
+import org.example.rideapp.state.EstadoViaje;
+
+public class Viaje implements Subject {
     private final String tipo;
     private final boolean wifi;
     private final boolean mascota;
@@ -28,7 +28,7 @@ public final class Viaje implements Subject {
      */
     private EstadoViaje estadoActual;
 
-    private Viaje(
+    protected Viaje(
             String tipo,
             boolean wifi,
             boolean mascota,
